@@ -9,7 +9,8 @@ const sayHello = (req, res, next) => {
 
 
 
-app.use(sayHello);
+app.get("/hello", sayHello)
+
 app.use(morgan("dev"));
 
 
