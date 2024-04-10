@@ -2,6 +2,8 @@ const express = require("express");
 const morgan = require("morgan");
 const app = express();
 
+
+//SERVER FUNCTIONS
 const sayHello = (req, res, next) => {
   console.log(req.query);
   const name = req.query.name;
@@ -22,6 +24,7 @@ const sayGoodbye = (req, res) => {
   res.send("Sorry to see you go!");
 };
 
+//SERVER ROUTES
 app.use(morgan("dev"));
 app.get('/hello', sayHello)
 app.get('/say/goodbye', sayGoodbye)
@@ -32,6 +35,26 @@ app.get('/songs', (req, res) => {
   const title = req.query.title;
   res.send(title)
 })
+
+app.get("/states/:abbreviation", (req, res, next) => {
+  const abbreviation = req.params.abbreviation;
+  if (abbreviation.length !== 2) {
+    next("State abbreviation is invalid.");
+  } else {
+    res.send(`${abbreviation} is a nice state, I'd like to visit.`);
+  }
+});
+
+
+//ERROR HANDLERS
+app.use((req, res, next) => {
+  res.send(`The route ${req.path} does not exist!`);
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.send(err);
+});
 
 
 module.exports = app;
