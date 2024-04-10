@@ -9,14 +9,22 @@ const sayHello = (req, res, next) => {
   res.send(content)
 };
 
+
 const saySomething = (req, res) => {
   const greeting = req.params.greeting;
-  const content = `${greeting}!`;
-  res.send(`${greeting}!`)
-}
+  const name = req.query.name;
+
+  const content = greeting && name ? `${greeting}, ${name}!` : `${greeting}!`;
+  res.send(content);
+};
+
+const sayGoodbye = (req, res) => {
+  res.send("Sorry to see you go!");
+};
 
 app.use(morgan("dev"));
 app.get('/hello', sayHello)
+app.get('/say/goodbye', sayGoodbye)
 app.get('/say/:greeting', saySomething)
 
 
