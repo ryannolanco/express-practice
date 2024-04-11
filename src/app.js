@@ -24,6 +24,15 @@ const sayGoodbye = (req, res) => {
   res.send("Sorry to see you go!");
 };
 
+const checkForAbbreviationLength = (req, res, next) => {
+  const abbreviation = req.params.abbreviation;
+  if (abbreviation.length !== 2) {
+    next("State abbreviation is invalid.");
+  } else {
+    next();
+  }
+};
+
 //SERVER ROUTES
 app.use(morgan("dev"));
 app.get('/hello', sayHello)
@@ -45,7 +54,7 @@ app.get("/states/:abbreviation", (req, res, next) => {
   }
 });
 
-
+\
 //ERROR HANDLERS
 app.use((req, res, next) => {
   res.send(`The route ${req.path} does not exist!`);
@@ -56,5 +65,22 @@ app.use((err, req, res, next) => {
   res.send(err);
 });
 
+
+//ROUTER LEVEL MIDDLEWARE 
+app.get(
+  "/states/:abbreviation",
+  checkForAbbreviationLength,
+  (req, res, next) => {
+    res.send(`${req.params.abbreviation} is a nice state, I'd like to visit.`);
+  }
+);
+
+app.get(
+  "/travel/:abbreviation",
+  checkForAbbreviationLength,
+  (req, res, next) => {
+    res.send(`Enjoy your trip to ${req.params.abbreviation}!`);
+  }
+);
 
 module.exports = app;
