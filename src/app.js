@@ -54,17 +54,6 @@ app.get("/states/:abbreviation", (req, res, next) => {
   }
 });
 
-\
-//ERROR HANDLERS
-app.use((req, res, next) => {
-  res.send(`The route ${req.path} does not exist!`);
-});
-
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.send(err);
-});
-
 
 //ROUTER LEVEL MIDDLEWARE 
 app.get(
@@ -82,5 +71,17 @@ app.get(
     res.send(`Enjoy your trip to ${req.params.abbreviation}!`);
   }
 );
+
+//ERROR HANDLERS
+app.use((req, res, next) => {
+  res.send(`The route ${req.path} does not exist!`);
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.send(err);
+});
+
+
 
 module.exports = app;
